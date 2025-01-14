@@ -14,9 +14,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(routes);
 
-app.get("*", (_req, res) => {
-    res.sendFile(path.join(process.cwd(), "../client/dist/index.html"));
-  });
+// app.get("*", (_req, res) => {
+//     res.sendFile(path.join(process.cwd(), "../client/dist/index.html"));
+//   });
 
 sequelize.sync({ force: forceDatabaseRefresh }).then(() => {
   app.listen(PORT, () => {
