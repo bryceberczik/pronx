@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { User } from "../models/index";
+import { Routine, User } from "../models/index";
 
 export const getAllUsers = async (_req: Request, res: Response) => {
   try {
@@ -17,6 +17,12 @@ export const getUserById = async (req: Request, res: Response) => {
   try {
     const user = await User.findByPk(id, {
       attributes: { exclude: ["password"] },
+      include: [
+        {
+          model: Routine,
+          attributes: ["id", "userId", "routineSteps"]
+        }
+      ]
     });
     if (user) {
       res.json(user);
