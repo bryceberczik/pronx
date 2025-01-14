@@ -5,6 +5,7 @@ interface IKanbanBoard {
   name: string;
   description?: string;
   userId: string;
+  tasks: Array<{ title: string; description: string; status: "todo" | "doing" | "done" }>;
 }
 
 interface ICreateKanbanBoard extends Optional<IKanbanBoard, "id"> {}
@@ -14,6 +15,7 @@ export class KanbanBoard extends Model<IKanbanBoard, ICreateKanbanBoard> impleme
   public name!: string;
   public description?: string;
   public userId!: string;
+  public tasks!: Array<{ title: string; description: string; status: "todo" | "doing" | "done" }>;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -42,6 +44,11 @@ export function KanbanBoardFactory(sequelize: Sequelize): typeof KanbanBoard {
           model: "users",
           key: "id",
         },
+      },
+      tasks: {
+        type: DataTypes.JSONB,
+        allowNull: false,
+        defaultValue: [],
       },
     },
     {
