@@ -3,7 +3,7 @@ import { DataTypes, Sequelize, Model, Optional } from "sequelize";
 interface IRoutine {
   id: string;
   userId: string;
-  routineSteps: Array<{ title: string; description: string; order: number }>;
+  routineSteps: Array<{ title: string; order: number }>;
 }
 
 interface ICreateRoutine extends Optional<IRoutine, "id"> {}
@@ -11,7 +11,7 @@ interface ICreateRoutine extends Optional<IRoutine, "id"> {}
 export class Routine extends Model<IRoutine, ICreateRoutine> implements IRoutine {
   public id!: string;
   public userId!: string;
-  public routineSteps!: Array<{ title: string; description: string; order: number }>;
+  public routineSteps!: Array<{ title: string; order: number }>;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
