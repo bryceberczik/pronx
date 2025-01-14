@@ -1,9 +1,9 @@
 const forceDatabaseRefresh = false;
 
 import express from 'express';
-import sequelize from './config/connection.js';
+import sequelize from './config/connection';
 import path from "node:path";
-import routes from './routes/index.js';
+import routes from './routes/index';
 
 const app = express();
 const PORT = process.env.PORT || 3001;

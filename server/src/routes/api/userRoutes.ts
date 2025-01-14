@@ -3,8 +3,8 @@ import {
   createUser,
   deleteUser,
   getAllUsers,
-  getUserById,
   updateUser,
+  getUserById
 } from "../../controllers/userController";
 
 const router = express.Router();
@@ -18,7 +18,6 @@ router.get("/:id", getUserById);
 // POST /users/ - CREATE A USER
 router.post("/", createUser);
 
-// PUT /users/:id - UPDATE A USER
 router.put("/:id", updateUser);
 
 // DELETE /users/:id - DELETE A USER
