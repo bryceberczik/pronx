@@ -1,0 +1,3 @@
+DROP DATABASE IF EXISTS pronx_db;
+
+CREATE DATABASE pronx_db;
