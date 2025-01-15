@@ -1,21 +1,21 @@
-import express from 'express';
-import { addSteps, createRoutine, getRoutine, deleteRoutine, removeSteps } from '../../controllers/routineController';
+// import express from 'express';
+// import { addSteps, createRoutine, getRoutine, deleteRoutine, removeSteps } from '../../controllers/routineController';
 
-const router = express.Router();
+// const router = express.Router();
 
-// GET ROUTINE
-router.get('/', getRoutine);
+// // GET ROUTINE
+// router.get('/', getRoutine);
 
-// CREATE A ROUTINE
-router.post('/', createRoutine);
+// // CREATE A ROUTINE
+// router.post('/', createRoutine);
 
-// ADD STEPS TO ROUTINE
-router.put('/:id/add', addSteps);
+// // ADD STEPS TO ROUTINE
+// router.put('/:id/add', addSteps);
 
-// REMOVE STEPS FROM ROUTINE
-router.put('/:id/remove', removeSteps);
+// // REMOVE STEPS FROM ROUTINE
+// router.put('/:id/remove', removeSteps);
 
-// DELETE A ROUTINE
-router.delete('/:id', deleteRoutine)
+// // DELETE A ROUTINE
+// router.delete('/:id', deleteRoutine)
 
-export { router as routineRouter };
+// export { router as routineRouter };
