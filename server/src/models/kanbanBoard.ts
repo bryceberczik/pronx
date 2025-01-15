@@ -3,9 +3,7 @@ import { DataTypes, Sequelize, Model, Optional } from "sequelize";
 interface IKanbanBoard {
   id: string;
   name: string;
-  description?: string;
   userId: string;
-  tasks: Array<{ title: string; description: string; status: "todo" | "doing" | "done" }>;
 }
 
 interface ICreateKanbanBoard extends Optional<IKanbanBoard, "id"> {}
@@ -13,9 +11,7 @@ interface ICreateKanbanBoard extends Optional<IKanbanBoard, "id"> {}
 export class KanbanBoard extends Model<IKanbanBoard, ICreateKanbanBoard> implements IKanbanBoard {
   public id!: string;
   public name!: string;
-  public description?: string;
   public userId!: string;
-  public tasks!: Array<{ title: string; description: string; status: "todo" | "doing" | "done" }>;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -32,10 +28,10 @@ export function KanbanBoardFactory(sequelize: Sequelize): typeof KanbanBoard {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
-      },
-      description: {
-        type: DataTypes.STRING,
-        allowNull: true,
+        validate: {
+          notEmpty: true,
+          len: [1, 15],
+        }
       },
       userId: {
         type: DataTypes.UUID,
@@ -45,14 +41,9 @@ export function KanbanBoardFactory(sequelize: Sequelize): typeof KanbanBoard {
           key: "id",
         },
       },
-      tasks: {
-        type: DataTypes.JSONB,
-        allowNull: false,
-        defaultValue: [],
-      },
     },
     {
-      tableName: "kanban_boards",
+      tableName: "kanbanBoards",
       sequelize,
     }
   );
