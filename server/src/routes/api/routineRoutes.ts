@@ -1,21 +1,39 @@
-// import express from 'express';
-// import { addSteps, createRoutine, getRoutine, deleteRoutine, removeSteps } from '../../controllers/routineController';
+import express from "express";
+import {
+  createRoutine,
+  createStep,
+  deleteRoutine,
+  getRoutine,
+  getStepByIdWithRoutine,
+  getStepsByRoutine,
+  updateStep,
+  deleteStep,
+} from "../../controllers/routineController";
 
-// const router = express.Router();
+const router = express.Router();
 
-// // GET ROUTINE
-// router.get('/', getRoutine);
+// GET ROUTINE
+router.get("/", getRoutine);
 
-// // CREATE A ROUTINE
-// router.post('/', createRoutine);
+// CREATE ROUTINE
+router.post("/", createRoutine);
 
-// // ADD STEPS TO ROUTINE
-// router.put('/:id/add', addSteps);
+// DELETE ROUTINE
+router.delete("/:id", deleteRoutine);
 
-// // REMOVE STEPS FROM ROUTINE
-// router.put('/:id/remove', removeSteps);
+// GET ALL STEPS
+router.get("/:routineId/steps", getStepsByRoutine);
 
-// // DELETE A ROUTINE
-// router.delete('/:id', deleteRoutine)
+// GET SPECIFIC STEP
+router.get("/:routineId/steps/:id", getStepByIdWithRoutine);
 
-// export { router as routineRouter };
+// CREATE STEP
+router.post("/:routineId/steps/", createStep);
+
+// UPDATE EVENT
+router.put("/:routineId/steps/:id", updateStep);
+
+// DELETE STEP
+router.delete("/:routineId/steps/:id", deleteStep);
+
+export { router as routineRouter };

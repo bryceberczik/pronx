@@ -29,4 +29,4 @@ Routine.belongsTo(User, { foreignKey: "userId" });
 Routine.hasMany(RoutineSteps, { foreignKey: "routineId", onDelete: "CASCADE" });
 RoutineSteps.belongsTo(Routine, { foreignKey: "routineId" });
 
-export { User, KanbanBoard, Calendar, Event, Routine };
+export { User, KanbanBoard, Calendar, Event, Routine, RoutineSteps };

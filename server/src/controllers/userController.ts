@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { Calendar, User } from "../models/index";
+import { Calendar, Routine, User } from "../models/index";
 
 export const getAllUsers = async (_req: Request, res: Response) => {
   try {
@@ -17,7 +17,7 @@ export const getUserById = async (req: Request, res: Response) => {
   try {
     const user = await User.findByPk(id, {
       attributes: { exclude: ["password"] },
-      include: [{ model: Calendar, }],
+      include: [{ model: Calendar, }, { model: Routine }],
     });
     if (user) {
       res.json(user);

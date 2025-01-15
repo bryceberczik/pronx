@@ -46,6 +46,7 @@ export const deleteCalendar = async (req: Request, res: Response) => {
     }
 
     await calendar.destroy();
+    res.json({ message: "Calendar deleted." })
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
