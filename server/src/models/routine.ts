@@ -3,7 +3,6 @@ import { DataTypes, Sequelize, Model, Optional } from "sequelize";
 interface IRoutine {
   id: string;
   userId: string;
-  routineSteps: Array<{ title: string; order: number }>;
 }
 
 interface ICreateRoutine extends Optional<IRoutine, "id"> {}
@@ -11,7 +10,28 @@ interface ICreateRoutine extends Optional<IRoutine, "id"> {}
 export class Routine extends Model<IRoutine, ICreateRoutine> implements IRoutine {
   public id!: string;
   public userId!: string;
-  public routineSteps!: Array<{ title: string; order: number }>;
+
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+}
+
+interface IRoutineStep {
+  id: string;
+  routineId: string;
+  title: string;
+  order: number;
+}
+
+interface ICreateRoutineStep extends Optional<IRoutineStep, "id"> {}
+
+export class RoutineStep
+  extends Model<IRoutineStep, ICreateRoutineStep>
+  implements IRoutineStep
+{
+  public id!: string;
+  public routineId!: string;
+  public title!: string;
+  public order!: number;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -32,11 +52,6 @@ export function RoutineFactory(sequelize: Sequelize): typeof Routine {
           model: "users",
           key: "id",
         },
-      },
-      routineSteps: {
-        type: DataTypes.JSONB,
-        allowNull: false,
-        defaultValue: [],
       },
     },
     {

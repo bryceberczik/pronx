@@ -37,30 +37,9 @@ export const createRoutine: RequestHandler = async (req: Request, res: Response)
 };
 
 
-export const addSteps: RequestHandler = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  const { id } = req.params;
-  const { title } = req.body;
-
+export const addSteps = async (req: Request, res: Response) => {
   try {
-    const routine = await Routine.findByPk(id);
 
-    if (!routine) {
-      res.status(404).json({ message: "Routine not found." });
-      return;
-    }
-
-    const newOrder = routine.routineSteps.length + 1;
-
-    const newStep = { title, order: newOrder };
-
-    routine.routineSteps = [...routine.routineSteps, newStep];
-
-    await routine.save();
-
-    res.json(routine);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -68,34 +47,8 @@ export const addSteps: RequestHandler = async (
 
 
 export const removeSteps: RequestHandler = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const { order } = req.body;
-
   try {
-    const routine = await Routine.findByPk(id);
 
-    if (!routine) {
-      res.status(404).json({ message: "Routine not found." });
-      return;
-    }
-
-    const stepIndex = routine.routineSteps.findIndex((step) => step.order === order);
-
-    if (stepIndex === -1) {
-      res.status(404).json({ message: "Step not found." });
-      return;
-    }
-
-    routine.routineSteps.splice(stepIndex, 1);
-
-    routine.routineSteps = routine.routineSteps.map((step, index) => ({
-      ...step,
-      order: index + 1,
-    }));
-
-    await routine.save();
-
-    res.json(routine);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
