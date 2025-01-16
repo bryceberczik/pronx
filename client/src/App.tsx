@@ -1,11 +1,12 @@
-import React from 'react';
-
-function App() {
+import { Outlet } from "react-router-dom";
+const App = () => {
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <p>Start prompting (or editing) to see magic happen :)</p>
+    <div>
+      <main>
+        <Outlet />
+      </main>
     </div>
   );
-}
+};
 
 export default App;
