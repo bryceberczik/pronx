@@ -72,7 +72,7 @@ const Home = () => {
         } cursor-pointer overflow-hidden`}
         onClick={() => setIsExpanded(!isExpanded)}
       >
-        <h1 className="text-center text-[#F5F5DC] text-[20px] m-2 p-0">
+        <h1 className="text-center text-[#F5F5DC] text-[20px] m-2">
           Routine
         </h1>
         {/* Content inside the expanded div */}
@@ -82,7 +82,7 @@ const Home = () => {
               className="bg-[#202020] p-2 rounded-[5px]"
               onClick={handleButtonClick}
             >
-              Add Step
+              Add Routine
             </button>
           </div>
         )}
