@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { getQuote } from "../services/getQuote";
 import { getUserById } from "../services/getUserById";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
 import { jwtDecode } from "jwt-decode";
 
 const Home = () => {
@@ -10,14 +12,15 @@ const Home = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [hasRoutine, setHasRoutine] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
+  const [show, setShow] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+
   interface User {
     firstName: string;
     lastName: string;
     email: string;
     Routine?: any;
   }
-
-  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const updateTime = () => {
@@ -71,7 +74,7 @@ const Home = () => {
     const fetchUser = async () => {
       if (userId) {
         try {
-          const user = await getUserById(userId) as User;
+          const user = (await getUserById(userId)) as User;
           setUser(user);
           setHasRoutine(!!user?.Routine);
         } catch (error) {
@@ -83,8 +86,13 @@ const Home = () => {
     fetchUser();
   }, [userId]);
 
+  const handleModal = () => {
+    setShow(!show);
+  };
+
   const handleButtonClick = (event: React.MouseEvent) => {
     event.stopPropagation();
+    handleModal();
   };
 
   return (
@@ -130,6 +138,46 @@ const Home = () => {
           </div>
         )}
       </div>
+
+      {show ? (
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <>
+      <Modal
+        show={show}
+        onHide={handleModal}
+        dialogClassName="rounded-lg shadow-xl"
+        className="!m-0"
+      >
+        <Modal.Header closeButton className="bg-[#302F2F] text-[#F5F5DC] ">
+          <Modal.Title className="text-lg font-semibold">
+            Add Step
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="bg-[#302F2F] text-[#F5F5DC] text-center">
+          Woohoo, you are reading this text in a modal!
+        </Modal.Body>
+        <Modal.Footer className="bg-[#302F2F] flex justify-between">
+          <Button
+            variant="secondary"
+            className="bg-gray-600 hover:bg-gray-700 text-[#F5F5DC]"
+            onClick={handleModal}
+          >
+            
+            Close
+          </Button>
+          <Button
+            variant="primary"
+            className="bg-blue-600 hover:bg-blue-700 text-[#F5F5DC]"
+            onClick={handleModal}
+          >
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  </div>
+) : null}
+
     </div>
   );
 };
