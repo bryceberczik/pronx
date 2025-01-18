@@ -103,7 +103,7 @@ const Home = () => {
     };
 
     fetchSteps();
-  }, [user]); // Depend on 'user' so this runs after it's set
+  }, [user]);
 
   const handleModal = () => {
     setShow(!show);
@@ -192,7 +192,7 @@ const Home = () => {
             >
               <Modal.Header
                 closeButton
-                className="bg-[#302F2F] text-[#F5F5DC] "
+                className="bg-[#302F2F] text-[#F5F5DC]"
               >
                 <Modal.Title className="text-lg font-semibold">
                   Add Step
