@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { getQuote } from "../services/getQuote";
 import { getUserById } from "../services/getUserById";
+import { createStep, getSteps } from "../services/stepService";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { jwtDecode } from "jwt-decode";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 const Home = () => {
   const [time, setTime] = useState("");
@@ -14,6 +17,8 @@ const Home = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [show, setShow] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [stepInput, setStepInput] = useState("");
+  const [steps, setSteps] = useState<any[]>([]);
 
   interface User {
     firstName: string;
@@ -86,6 +91,20 @@ const Home = () => {
     fetchUser();
   }, [userId]);
 
+  useEffect(() => {
+    const fetchSteps = async () => {
+      if (user?.Routine?.id) {
+        const routineSteps = await getSteps(user?.Routine.id) as any[];
+        setSteps(routineSteps);
+        console.log(routineSteps);
+      } else {
+        console.log("Routine ID is not available.");
+      }
+    };
+
+    fetchSteps();
+  }, [user]); // Depend on 'user' so this runs after it's set
+
   const handleModal = () => {
     setShow(!show);
   };
@@ -93,6 +112,17 @@ const Home = () => {
   const handleButtonClick = (event: React.MouseEvent) => {
     event.stopPropagation();
     handleModal();
+  };
+
+  const handleAddStepInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStepInput(e.target.value);
+  };
+
+  const handleAddStep = () => {
+    if (user?.Routine?.id) {
+      createStep(user.Routine.id, stepInput);
+      setShow(!show);
+    }
   };
 
   return (
@@ -126,12 +156,23 @@ const Home = () => {
         {isExpanded && (
           <div className="p-2 text-[#F5F5DC] flex flex-col items-center">
             {hasRoutine ? (
-              <button
-                className="bg-[#202020] p-2 rounded-[5px]"
-                onClick={handleButtonClick}
-              >
-                Add Step
-              </button>
+              <div>
+                <button
+                  className="bg-[#202020] w-8 h-8 rounded-[5px] flex items-center justify-center"
+                  onClick={handleButtonClick}
+                >
+                  <FontAwesomeIcon icon={faPlus} />
+                </button>
+
+                <div>
+                  {/* Steps list (just an example) */}
+                  {steps.map((step) => (
+                    <div key={step.id}>
+                      <p>{step.title}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
             ) : (
               <h1>Failed to find routine.</h1>
             )}
@@ -140,44 +181,51 @@ const Home = () => {
       </div>
 
       {show ? (
-  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-    <>
-      <Modal
-        show={show}
-        onHide={handleModal}
-        dialogClassName="rounded-lg shadow-xl"
-        className="!m-0"
-      >
-        <Modal.Header closeButton className="bg-[#302F2F] text-[#F5F5DC] ">
-          <Modal.Title className="text-lg font-semibold">
-            Add Step
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="bg-[#302F2F] text-[#F5F5DC] text-center">
-          Woohoo, you are reading this text in a modal!
-        </Modal.Body>
-        <Modal.Footer className="bg-[#302F2F] flex justify-between">
-          <Button
-            variant="secondary"
-            className="bg-gray-600 hover:bg-gray-700 text-[#F5F5DC]"
-            onClick={handleModal}
-          >
-            
-            Close
-          </Button>
-          <Button
-            variant="primary"
-            className="bg-blue-600 hover:bg-blue-700 text-[#F5F5DC]"
-            onClick={handleModal}
-          >
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
-  </div>
-) : null}
-
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <>
+            <Modal
+              show={show}
+              onHide={handleModal}
+              dialogClassName="rounded-lg shadow-xl"
+              className="!m-0"
+              centered
+            >
+              <Modal.Header
+                closeButton
+                className="bg-[#302F2F] text-[#F5F5DC] "
+              >
+                <Modal.Title className="text-lg font-semibold">
+                  Add Step
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body className="bg-[#302F2F] text-[#F5F5DC] text-center">
+                <input
+                  type="text"
+                  placeholder="Add a step to the routine."
+                  className="w-full px-4 py-2 bg-[#1E1E1E] text-[#F5F5DC] border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
+                  onChange={handleAddStepInput}
+                />
+              </Modal.Body>
+              <Modal.Footer className="bg-[#302F2F]">
+                <Button
+                  variant="secondary"
+                  className="bg-gray-600 hover:bg-gray-700 text-[#F5F5DC]"
+                  onClick={handleModal}
+                >
+                  Close
+                </Button>
+                <Button
+                  variant="secondary"
+                  className="bg-gray-600 hover:bg-gray-700 text-[#F5F5DC]"
+                  onClick={handleAddStep}
+                >
+                  Add Step
+                </Button>
+              </Modal.Footer>
+            </Modal>
+          </>
+        </div>
+      ) : null}
     </div>
   );
 };
