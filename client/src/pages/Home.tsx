@@ -7,6 +7,8 @@ import Button from "react-bootstrap/Button";
 import { jwtDecode } from "jwt-decode";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faX } from "@fortawesome/free-solid-svg-icons";
+import { getRoutine } from "../services/getRoutine";
+import { deleteStep } from "../services/deleteStep";
 
 const Home = () => {
   const [time, setTime] = useState("");
@@ -118,12 +120,41 @@ const Home = () => {
     setStepInput(e.target.value);
   };
 
-  const handleAddStep = () => {
-    if (user?.Routine?.id) {
-      createStep(user.Routine.id, stepInput);
-      setShow(!show);
+  const handleAddStep = async () => {
+    if (user?.Routine?.id && stepInput.trim()) {
+      try {
+        const newStep = await createStep(user.Routine.id, stepInput);
+        setSteps((prevSteps) => {
+          if (Array.isArray(prevSteps)) {
+            return [...prevSteps, newStep];
+          } else {
+            console.error("prevSteps is not an array", prevSteps);
+            return [newStep];
+          }
+        });
+        setShow(false);
+        setStepInput("");
+      } catch (error) {
+        console.error("Error adding step:", error);
+      }
     }
   };
+  
+
+  const handleDeleteStep = async (stepId: string, event: React.MouseEvent) => {
+    event.stopPropagation();
+    try {
+      const routine = (await getRoutine(user?.Routine.id)) as { id: string };
+      if (routine?.id && stepId) {
+        await deleteStep(routine.id, stepId);
+
+        setSteps(steps.filter(step => step.id !== stepId));
+      }
+    } catch (error) {
+      console.error("Error deleting step:", error);
+    }
+  };
+  
 
   return (
     <div>
@@ -168,6 +199,7 @@ const Home = () => {
                         <p className="my-0 mx-0 p-2">{step.title}</p>
                         <FontAwesomeIcon
                           className="mx-3 cursor-pointer text-[#F5F5DC] hover:text-red-500"
+                          onClick={(event) => handleDeleteStep(step.id, event)}
                           icon={faX}
                         />
                       </div>
