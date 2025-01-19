@@ -157,14 +157,7 @@ const Home = () => {
           <div className="p-2 text-[#F5F5DC] flex flex-col items-center">
             {hasRoutine ? (
               <div className="flex flex-col items-center">
-                <button
-                  className="bg-[#202020] w-8 h-8 rounded-[5px] flex items-center justify-center"
-                  onClick={handleButtonClick}
-                >
-                  <FontAwesomeIcon icon={faPlus} />
-                </button>
-
-                <div className="max-h-[248px] overflow-y-auto w-full">
+                                <div className="max-h-[248px] overflow-y-auto w-full">
                   {/* Steps list */}
                   {steps.length > 0 ? (
                     steps.map((step) => (
@@ -180,11 +173,20 @@ const Home = () => {
                       </div>
                     ))
                   ) : (
-                    <p className="text-gray-500 text-sm mt-3">
-                      No steps yet. Add one using the button above!
+                    <p className="text-[#F5F5DC] text-center mt-3">
+                      No steps added yet.
                     </p>
                   )}
                 </div>
+                <button
+                  className="bg-[#202020] rounded-[5px] flex items-center justify-center px-4 py-2 gap-2"
+                  onClick={handleButtonClick}
+                >
+                  <p className="m-0 p-0">Add Step</p>
+                  <FontAwesomeIcon icon={faPlus} />
+                </button>
+
+
               </div>
             ) : (
               <h1>Failed to find routine.</h1>
