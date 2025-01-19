@@ -4,6 +4,7 @@ import {
   createStep,
   deleteRoutine,
   getRoutine,
+  getRoutineById,
   getStepByIdWithRoutine,
   getStepsByRoutine,
   updateStep,
@@ -14,6 +15,9 @@ const router = express.Router();
 
 // GET ROUTINE
 router.get("/", getRoutine);
+
+// GET ROUTINE BY ID
+router.get("/:routineId", getRoutineById);
 
 // CREATE ROUTINE
 router.post("/", createRoutine);
