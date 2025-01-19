@@ -6,7 +6,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { jwtDecode } from "jwt-decode";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faX } from "@fortawesome/free-solid-svg-icons";
 
 const Home = () => {
   const [time, setTime] = useState("");
@@ -94,7 +94,7 @@ const Home = () => {
   useEffect(() => {
     const fetchSteps = async () => {
       if (user?.Routine?.id) {
-        const routineSteps = await getSteps(user?.Routine.id) as any[];
+        const routineSteps = (await getSteps(user?.Routine.id)) as any[];
         setSteps(routineSteps);
         console.log(routineSteps);
       } else {
@@ -156,7 +156,7 @@ const Home = () => {
         {isExpanded && (
           <div className="p-2 text-[#F5F5DC] flex flex-col items-center">
             {hasRoutine ? (
-              <div>
+              <div className="flex flex-col items-center">
                 <button
                   className="bg-[#202020] w-8 h-8 rounded-[5px] flex items-center justify-center"
                   onClick={handleButtonClick}
@@ -164,13 +164,26 @@ const Home = () => {
                   <FontAwesomeIcon icon={faPlus} />
                 </button>
 
-                <div>
-                  {/* Steps list (just an example) */}
-                  {steps.map((step) => (
-                    <div key={step.id}>
-                      <p>{step.title}</p>
-                    </div>
-                  ))}
+                <div className="max-h-[248px] overflow-y-auto w-full">
+                  {/* Steps list */}
+                  {steps.length > 0 ? (
+                    steps.map((step) => (
+                      <div
+                        className="flex flex-row items-center justify-between border-[1px] border-[#F5F5DC] rounded-[5px] my-3 w-[250px]"
+                        key={step.id}
+                      >
+                        <p className="my-0 mx-0 p-2">{step.title}</p>
+                        <FontAwesomeIcon
+                          className="mx-3 cursor-pointer text-[#F5F5DC] hover:text-red-500"
+                          icon={faX}
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-gray-500 text-sm mt-3">
+                      No steps yet. Add one using the button above!
+                    </p>
+                  )}
                 </div>
               </div>
             ) : (
@@ -190,10 +203,7 @@ const Home = () => {
               className="!m-0"
               centered
             >
-              <Modal.Header
-                closeButton
-                className="bg-[#302F2F] text-[#F5F5DC]"
-              >
+              <Modal.Header closeButton className="bg-[#302F2F] text-[#F5F5DC]">
                 <Modal.Title className="text-lg font-semibold">
                   Add Step
                 </Modal.Title>

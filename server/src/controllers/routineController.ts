@@ -63,7 +63,7 @@ export const getStepsByRoutine: RequestHandler = async (
     });
 
     if (steps.length === 0) {
-      res.status(404).json({ message: "No steps found for this routine." });
+      res.json({ message: "No steps found for this routine." });
       return;
     }
 
