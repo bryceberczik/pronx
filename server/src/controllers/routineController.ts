@@ -12,6 +12,18 @@ export const getRoutine = async (_req: Request, res: Response) => {
   }
 };
 
+export const getRoutineById = async (req: Request, res: Response) => {
+  const { routineId } = req.params;
+  try {
+    const routine = await Routine.findByPk(routineId, {
+      include: [{ model: RoutineSteps }],
+    });
+    res.json(routine);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 export const createRoutine: RequestHandler = async (
   req: Request,
   res: Response
@@ -63,7 +75,7 @@ export const getStepsByRoutine: RequestHandler = async (
     });
 
     if (steps.length === 0) {
-      res.status(404).json({ message: "No steps found for this routine." });
+      res.json({ message: "No steps found for this routine." });
       return;
     }
 

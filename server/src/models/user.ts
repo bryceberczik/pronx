@@ -72,6 +72,7 @@ export function UserFactory(sequelize: Sequelize): typeof User {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
+          
           notNull: { msg: "Password is required" },
           len: {
             args: [8, 128],
